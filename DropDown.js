@@ -1,5 +1,6 @@
 // Select the submit button
 var data_po = data;
+var data_order_desk=order_desk_data;
 var submit = d3.select("#submit");
 
 submit.on("click", function() {
@@ -16,11 +17,12 @@ submit.on("click", function() {
 
   // clear the input value
   d3.select("#patient-form-input").node().value = "";
-
+  $('#artists').empty();
 
   var filteredData = data_po.filter(data_po=> data_po.ID === parseInt(inputValue));
   var PO_KEY = filteredData[0]['Key']
   var report_url = filteredData[0]['Report']
+  var orderdesk = filteredData[0]['Order Desk']
   console.log(PO_KEY);
 
   var Airtable = require('airtable');
@@ -55,4 +57,30 @@ submit.on("click", function() {
     $artistInfo.attr('id', 'artists');
     $('#artists').append($artistInfo);
 });
-});
+
+// GET ORDER DESK INFO DATA
+
+orderdesk.forEach( orderdesk_id => { 
+    var order_desk_info = data_order_desk.filter(data_order_desk => data_order_desk.Key === orderdesk_id) ;
+    // get the value into datatable
+    var tbody = d3.select("tbody");
+    //  order_desk_info.forEach((ufoReport) => {
+    //     var row = tbody.append("tr");
+    //     Object.entries(ufoReport).forEach(([key, value]) => {
+    //       var cell = tbody.append("td");
+    //       cell.text(value);
+    //     });
+    //   });
+    
+    
+    
+    var tbody = d3.select("tbody");
+    var row = tbody.append("tr");
+    tbody.append('td').text(order_desk_info[0]['Info']);
+    tbody.append('td').text(order_desk_info[0]['Image']);
+    tbody.append('td').text(order_desk_info[0]['Order QTY']);
+    tbody.append('td').text(order_desk_info[0]['Recieved QTY']);
+
+
+    });
+  });
